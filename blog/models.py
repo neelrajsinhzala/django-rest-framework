@@ -17,4 +17,4 @@ class Comment(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     def __str__(self):
-        return "Comment - " + self.content + "On" + self.post + "By" + self.user
+        return "Comment - " + self.content

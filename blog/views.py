@@ -12,7 +12,6 @@ from rest_framework.pagination import PageNumberPagination
 class PostViewSet(APIView):  
     # -------------------------------------------------- FOR PERMISSION ---------------------------------------------------------
     permission_classes = [IsOwnerOrReadOnly]
-
     def get(self, request, pk=None):
         if pk:
             post = get_object_or_404(Post, pk=pk)
@@ -75,7 +74,7 @@ class CommentViewSet(APIView):
         else:
             comments = Comment.objects.all()
             # -------------------------------------------------- FOR SEARCH QUERY ---------------------------------------------------------
-            search_query = request.query_params.get('search', None)
+            search_query = request.query_param.get('search', None)
             if search_query:
                 comments = comments.filter(Q(content__icontains=search_query) | Q(user__username__icontains=search_query) | Q(post__title__icontains=search_query))
             # -------------------------------------------------- FOR PAGINATION ---------------------------------------------------------
@@ -110,7 +109,7 @@ class CommentViewSet(APIView):
                     return Response(serializer.data)
                 return Response(serializer.errors)
             return Response({"error": "You do not have permission to edit this comment"})
-        return Response({"error": "Please provide a comment ID in the URL eg.http://127.0.0.1:8000/comments/4"})
+        return Response({"error": "Please provide a comment ID in the URL eg. http://127.0.0.1:8000/comments/4"})
 
     def delete(self, request, pk=None):
         if pk:
@@ -119,7 +118,7 @@ class CommentViewSet(APIView):
                 comment.delete()
                 return Response({"message": "Comment deleted successfully"})
             return Response({"error": "You do not have permission to delete this comment"})
-        return Response({"error": "Please provide a comment ID in the URL eg.http://127.0.0.1:8000/comments/4"})
+        return Response({"error": "Please provide a comment ID in the URL eg. http://127.0.0.1:8000/comments/4"})
 
 class RegisterUserView(APIView):
     def post(self, request):
