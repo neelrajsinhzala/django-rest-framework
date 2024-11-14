@@ -9,8 +9,8 @@ from django.db.models import Q
 from rest_framework.pagination import PageNumberPagination
 
 # Post APIView
-class PostViewSet(APIView):  
-    # -------------------------------------------------- FOR PERMISSION ---------------------------------------------------------
+class PostViewSet(APIView):   
+# --------------------------------------------------------------- FOR PERMISSION ---------------------------------------------------------------
     permission_classes = [IsOwnerOrReadOnly]
     def get(self, request, pk=None):
         if pk:
@@ -19,11 +19,11 @@ class PostViewSet(APIView):
             return Response(serializer.data)
         else:
             posts = Post.objects.all()
-            # -------------------------------------------------- FOR SEARCH QUERY ---------------------------------------------------------
+# --------------------------------------------------------------- FOR SEARCH QUERY -------------------------------------------------------------
             search_query = request.query_params.get('search', None)
             if search_query:
                 posts = posts.filter(Q(title__icontains=search_query) | Q(content__icontains=search_query) | Q(author__username__icontains=search_query))
-            # -------------------------------------------------- FOR PAGINATION ---------------------------------------------------------
+# --------------------------------------------------------------- FOR PAGINATION ---------------------------------------------------------------
             paginator = PageNumberPagination()
             paginator.page_size = 3
             result_page = paginator.paginate_queryset(posts, request)
@@ -63,7 +63,7 @@ class PostViewSet(APIView):
 
 # Comment APIView
 class CommentViewSet(APIView):
-    # -------------------------------------------------- FOR PERMISSION ---------------------------------------------------------
+# --------------------------------------------------------------- FOR PERMISSION ---------------------------------------------------------------
     permission_classes = [IsOwnerOrReadOnly]
 
     def get(self, request, pk=None):
@@ -73,11 +73,11 @@ class CommentViewSet(APIView):
             return Response(serializer.data)
         else:
             comments = Comment.objects.all()
-            # -------------------------------------------------- FOR SEARCH QUERY ---------------------------------------------------------
+# --------------------------------------------------------------- FOR SEARCH QUERY -------------------------------------------------------------
             search_query = request.query_param.get('search', None)
             if search_query:
                 comments = comments.filter(Q(content__icontains=search_query) | Q(user__username__icontains=search_query) | Q(post__title__icontains=search_query))
-            # -------------------------------------------------- FOR PAGINATION ---------------------------------------------------------
+# --------------------------------------------------------------- FOR PAGINATION ---------------------------------------------------------------
             paginator = PageNumberPagination()
             paginator.page_size = 2
             result_page = paginator.paginate_queryset(comments, request)
